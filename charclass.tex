@@ -1,0 +1,296 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsthm}
+\usepackage{physics}
+\usepackage{relsize}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage[margin=0.5in]{geometry}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{prop}{Proposition}[section]
+\theoremstyle{definition}
+\newtheorem{ex}{Example}[section]
+\newtheorem{defn}{Definition}[section]
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\cat}{mathbf}
+\let\vec\mathbf
+\title{Characteristic Classes}
+\author{}
+\date{}
+
+\begin{document}
+\Large
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Crash Course in Manifold Theory}
+This section is nothing other than a rapid overview of the basic results of manifold theory. As these necessities are not the point of this document, I leave most proofs to the imagination. The later sections will contain many more proofs, so I humbly ask forgiveness for these brief oversights. 
+\subsection{Basic Definitions}
+We follow Lee\cite{Lee}.
+\begin{defn}
+A \textbf{topological manifold} $M$ is a Hausdorff, paracompact topological space such that for any $x\in M$, there is an open neighborhood $U$ of $x$ and a homeomorphism $\phi:U\rightarrow V\subset\R^{n}$ for some $n\in\N$, $V$ open in $\R^{n}.$
+The pair $(U,\phi)$  is called a \textbf{chart}. A collection of charts that cover $M$ is called an \textbf{atlas}.
+\end{defn}
+\begin{ex}
+Let $S^{2}=\{(x,y,z):x^{2}+y^{2}+z^{2}=1\},$ which lives in $\R^{3}.$ Let $N=(0,0,1)$ and $S=(0,0,-1)$. Let $U=S^{2}\backslash\{N\}$ and $\phi:U\rightarrow\R^{2}$ be given by $(x,y,z)\mapsto (\frac{x}{1-z},\frac{y}{1-z}).$ Similarly, if $V=S^{2}\backslash\{S\}$, a homeomorphism is given by $\psi$, defined as $(x,y,z)\mapsto (\frac{x}{1+z},\frac{y}{1+z})$.
+\end{ex}
+
+ Write $\mathbb{H}^{n}$ for the set $\R^{n}_{x\geq0}=\{(x_{1},\dots,x_{n}):x_{n}\geq0\}.$ 
+\begin{defn}
+A \textbf{topological manifold with boundary} $M$ is a Hausdorff, paracompact topological space such that for any $x\in M$, there is an open neighborhood $U$ of $x$ and a homeomorphism $\phi:U\rightarrow V\subset\R^{n}$ for some $n\in\N$, $V$ open in $\mathbb{H}^{n}$. 
+\end{defn}
+\begin{ex}
+Let $[a,b]\subset\R$ be a closed interval. If $N$ is a topological manifold of dimension $n-1$, then $N\times[a,b]$ is an $n$-dimensional manifold with boundary
+\[\partial(N\times[a,b])=(N\times\{a\})\cup(N\times\{b\}).\]
+\end{ex}
+
+While topological manifolds themselves have a rich theory, we will be most interested in \textit{smooth} manifolds. In order to define these, we first make a few definitions. 
+
+Let $\vec{x}:U\rightarrow\vec{x}(u)\subset\R^{n}$ be a chart. If $\text{pr}_{i}:\R^{n}\rightarrow\R$ is the projection onto the $i$-th factor given by $\text{pr}_{i}(a^{1},a^{2},\dots,a^{n})=a^{i}$, then $x^{i}$ is the function defined by $x^{i}=\text{pr}_{i}\circ\vec{x}$. $x^{i}$ is called the $i$-th \textbf{coordinate function} for the chart $(U,\vec{x}).$
+
+Now, let $\mathcal{A}=\{(U_{\alpha},\vec{x}_{\alpha})\}_{\alpha\in A}$ be a  collection of $\R^{n}$-valued charts on a st $M$. 
+\begin{defn}
+$\mathcal{A}$ is an $\R^{n}$-valued atlas of class $C^{r}$ if the following conditions are satisfied:
+\begin{itemize}
+\item[i.] $\bigcup_{\alpha\in A}U_{\alpha}=M.$
+\item[ii.] $\vec{x}_{\alpha}(U_{\alpha}\cap U_{\beta})$ is open in $\R^{n}$ for all $\alpha,\beta\in A.$
+\item[iii.] If $U_{\alpha}\cap U_{\beta}\not=\emptyset$,  $\vec{x}_{\beta}\circ\vec{x}_{\alpha}^{-1}:\vec{x}_{\alpha}(U_{\alpha}\cap U_{\beta})\rightarrow\vec{x}_{\beta}(U_{\alpha}\cap U_{\beta})$ is a $C^{r}$ diffeomorphism.
+\end{itemize}
+\end{defn}
+
+
+Two $C^{r}$ atlases are equivalent provided their union is also a $C^{r}$ atlas for $M$. A $C^{r}$ \textbf{differentiable structure} on $M$ is an equivalence class of $C^{r}$ atlases. A $C^{\infty}$ differentiable structure is called a $smooth$ structure. We are finally ready for the big definition:
+\begin{defn} 
+A \textbf{smooth manifold} is a pair $(M,\mathcal{A})$ where $\mathcal{A}$ is a maximal $C^{\infty}$ (smooth) atlas with respect to the atlas equivalence relation. 
+\end{defn}
+Below are some important examples which will be used throught these notes:
+\begin{ex}[Spheres]
+$S^{2}$ as described above is a smooth manifold. Similarly for $S^{n}$. 
+\end{ex}
+\begin{ex}[Real Projective Plane]
+We first consider a low dimensional example. Recall that $\R P^{2}$, the real projective plane, is the set of all lines through the origin in $\R^{3}$. Let $U_{z}$ be the set of all lines $\ell\in\R P^{2}$ not contained in the $x,y$ plane. Every line $\ell\in U_{z}$ intersects the $z=1$ plane at exactly one point of the form $(x(\ell),y(\ell),1).$ We can define a chart via $\phi_{z}:U_{z}\rightarrow\R^{2}$ defined via $\ell\mapsto (x(\ell),y(\ell)).$ We have analogous charts $(U_{x},\phi_{x}),(U_{y},\phi_{y}),$ which form an atlas.  
+\end{ex}
+\begin{ex}[Higher Dimensional Projective Space]
+Let $\R P^{n}$ be the set of all lines through the origin in $\R^{n+1}.$ We have the surjective map $\pi:\R^{n+1}\backslash\{0\}\rightarrow\R P^{n}$ given by $x\mapsto$ [the line through $x$ and the origin]. The atlas is defined in the same manner the 2 dimensional case above.  
+\end{ex}
+\begin{ex}[$M_{m\times n}(\R)$]
+We need only one chart, defined via \[[a_{ij}]\mapsto(a_{11},a_{12},\dots,a_{mn})\in\R^{mn}.\] Note that $\text{GL}(n,\R)$ is an open submanifold of $M_{n\times n}\cong\R^{n^{2}},$ since $\text{GL}(n,\R)=\det^{-1}(\R\backslash\{0\})$
+\end{ex}
+\begin{ex}[Grassmannian]
+Let $G(n,k)$ denote the set of $k$-dimensional subspaces of $\R^{n}.$ We represent a $k$-plane as an $n\times k$ matrix whose column vectors span the $k$-plane. We then put an equivalence relation on the set of $n\times k$ matrices where $A\sim Ag$ for any $k\times k$ nonsingular matrix $g$. Let $\mathbb{M}_{n\times k}^{\text{full}}$ be the set of $n\times k$ matrices with rank $k<n$. Then $G(n,k)=\mathbb{M}_{n\times k}^{\text{full}}/\sim.$ Let $U$ be the set of all $[A]\in G(n,k)$ such that any representative $A$ has its first $k$ rows linearly independent. Then $[A]\in U$ has a unique representative of the form
+\[
+\begin{bmatrix}
+I_{k\times k}\\
+Z
+\end{bmatrix},
+\]
+obtained by column reduction. We thus have a map on $U$ defined by
+\[[A]\rightarrow Z\in M_{(n-k)\times k}\cong\R^{k(n-k)}. \] Now, let $1\leq i_{1}\leq\cdots\leq i_{k}\leq n$. Let $U_{i_{1}\dots i_{k}}$ be the set of all $W$ such that the $k$ rows of $W$ indexed by $i_{1},\dots,i_{k}$ are linearly independent. The chart is defined by the map $A^{i_{1}\dots i_{k}}$ which maps $W$ to the matrix whose rows are the rows of $WW^{-1}_{i_{1}\dots{i_k}}$ complimentary to the $i_{1}\dots i_{k}.$  We can thus define the following atlas $\{(U_{i_{1}\dots i_{k}},A^{i_{1}\dots i_{k}})\}$ where the $i_{i},\dots,i_{k}$ range over all possible increasing sets of $k$ integers from 1 to $n$. These indeed form an atlas, as if $U_{i_{1},\dots,i_{k}}\cap U_{i_{1},\dots,i_{k}}$ is nonempty, we have the relation $A^{i_{1}\dots i_{k}}W_{i_{1}\dots i_{k}}=A^{j_{1}\dots j_{k}}W_{j_{1},\dots,j_{k}}$, where both $W_{i_{1}\dots i_{k}}$ and $W_{j_{1},\dots,j_{k}}$ are invertible. 
+\end{ex}
+\subsection{The Category Man}
+Let $M$ and $N$ be smooth manifolds, and let $f:M\rightarrow N$. Let $p\in M$. $f$ is said to be \textit{smooth} if there are charts $(U,\vec{x}),(V,\vec{y}),p\in U,f(p)\in V$, such that $f(U)\subset V$ and $\vec{y}\circ f\circ\vec{x}^{-1}$ is smooth. Smooth manifolds and the maps between them assemble into a category $Man$.
+
+Write $C^{\infty}(M,N)$ for the real algebra of smooth maps between $M$ and $N$. We write $C^{\infty}(M)$ as shorthand for $C^{\infty}(M,\R).$ Note that checking smoothness of a function from $f:M\rightarrow\R$ amounts to checking the smoothness of $f\circ\vec{x}_{\alpha}^{-1}:\vec{x}_{\alpha}(U_{\alpha})\rightarrow\R$ for charts $(U_{\alpha},\vec{x}_{\alpha})$.
+\subsection{Submanifolds}
+We first consider submanifolds of the manifold we grew up with, $\R^{n}.$ \begin{defn}
+A subset $M$ of $\R^{n}$ is a $k$-\textbf{dimensional submanifold} if for every point $x$ in $M$ there exists a neighborhood $V$ of $x$ in $\R^{n}$, an open set $U\subset\R^{k}$ and a smooth map $\xi:U\rightarrow\R^{n}$ such that there is a homeomorphism onto $M\cap V$, and $D_{y}\xi$ is injective for every $y\in U$.
+\end{defn}
+
+I find it more illuminating to consider nonexamples:
+\begin{ex}
+$\xi(t)=(t^{2},t^{3}-t),t\in(-2,2)$ violates injectivity.
+
+$\xi(t)=(t^{2},t^{3}-t),t\in(-1,2)$ violates the intersection requirement.
+
+$\xi(t)=(t^{2},t^{3}),t\in(-1,2)$ violates the injectivity of the derivative, creating a cusp.
+\end{ex}
+We can now make the official definition:
+\begin{defn}
+A subset $M$ of a manifold $N$ is a $k$-dimension submanifold of $N$ if for every $x\in M$ and every chart $\phi:U\rightarrow \R^{n}$ for $N$ with $x\in U$, $\phi(M\cap U)$ is a $k$-dimensional submanifold of $\R^{n}$.
+\end{defn}
+\subsection{Tangent Spaces}
+We begin by examining tangent spaces from a purely geometric point of view.
+Let $c:(-\epsilon,\epsilon)\rightarrow \R^{n}$ be a smooth curve. Writing $c(t)=(x^{1}(t),\dots,x^{n}(t))$, we have that the velocity vector of the curve at time $t=0$ is $(c(0),\frac{dx^{1}}{dt}(0),\frac{dx^{2}}{dt}(0),\dots,\frac{dx^{n}}{dt}(0))$. We can thus make a naive definition of the tangent space at a point $p\in\R^{n}$ as $T_{p}M:=\{p\}\times\R^{n}.$ Let $v_{p}:=(v,p)\in T_{p}\R^{n}$. Note that there are many different curves $c$ with $c(0)=p$ which give rise to the same tangent vector. We introduce an equivalence relation on curves, defined below. We can also consider tangent vectors as giving directional derivative operators. I.e., if $v_{p}\in T_{p} M$, we have an operator from $C^{\infty}\rightarrow\R$ given by $f\mapsto Df(p)v$. 
+
+Now, we consider an arbitrary smooth manifold.
+Let $p$ be a point in a smooth $n$-manifold $M$. Suppose that we have smooth curves $c_{1}$ and $c_{2}$ mapping into $M$, each with domain open intervals containing 0 such that $c_{1}(0)=c_{2}(0)=p.$ We say that $c_{1}$ is tangent to $c_{2}$ at $p$ if for all smooth, real-valued functions $f$ defined on an open neighborhood of $p$, we have $(f\circ c_{1})'(0)=(f\circ c_{2})'(0).$ This is clearly an equivalence relation, and we define a \textbf{tangent vector} at $p$ to be such an equivalence class. The \textbf{tangent space} at $p$ is the set of all tangent vectors at $p$.
+
+The second iteration of the tangent space is one based on charts. Let $\mathcal{A}$ be the maximal atlas for an $n$-manifold $M$. For a fixed $p\in M$, consider the set $\Gamma_{p}$ of all triples $(p,v,(U,\vec{x}))\in\{p\}\times\R^{n}\times\mathcal{A}$ such that $p\in U$. Define an equivalence relation on $\Gamma_{p}$ by requiring that $(p,v,(U,\vec{x}))\sim(p,w,(V,\vec{y}))$ if and only if $w=D(\vec{y}\circ\vec{x}^{-1})|_{\vec{x}(p)}\cdot v$. This is in fact the change of coordinates formula. Indeed, let $(U,\vec{x})$ and $(V,\vec{y})$ be two charts containing $p$ in their domains. Let $(v^{1},\dots,v^{n})$ be a tangent vector from the "point of view" of $(U,\vec{x})$, and let $(w^{1},\dots,w^{n})$ represent the same vector for $(V,\vec{y})$. Then, the two are related via
+\[w^{i}=\sum_{j=1}^{n}\frac{\partial y^{i}}{\partial x^{j}}|_{\vec{x}(p)}v^{j}, \] where $y^{i}=y^{i}(x^{1},x^{2},\dots,x^{n}),1\leq i\leq n$. We define $\Gamma_{p}/\sim$ as the tangent space at $p$.
+
+The third and final iteration of the tangent space is purely algebraic. A tangent vector $v_{p}$ at $p$ is a derivation on the algebra $C^{\infty}(M)$ with respect to the evaluation map. I.e., for all $f,g\in C^{\infty}(M),$ we have
+\[v_{p}(fg)=v_{p}(f)\text{ev}_{p}(g)+v_{p}(g)\text{ev}_{p}(f), \] where \[v_{p}(f)=D(f\circ\vec{x}^{-1})|_{x_{p}}\cdot v=\sum_{i=1}^{n}v^{i}\frac{\partial}{\partial x^{i}}|_{p}f.\] All three formulations are equivalent, and one should (at least once) view the details. As these preliminaries have followed Lee\cite{Lee}, I recommend viewing them there. 
+
+\begin{theorem}
+The set
+\[\{\frac{\partial}{\partial x^{1}}|_{p},\frac{\partial}{\partial x^{2}}|_{p},\dots,\frac{\partial}{\partial x^{n}}|_{p} \}\] is a basis for $T_{p}M$.
+\end{theorem}
+
+\subsection{Push-forward of Tangent Vectors}
+Let $Vect_{\R}$ denote the category of real vector spaces. We can then define a functor $T_{p}(\cdot):\cat{Man}_{p}\rightarrow\cat{Vect}_{\R},$ defined by $M\mapsto T_{p}M$. Let $f\in\text{hom}_{\cat{Man}_{p}}(M,N)$. Then $T_{p}(f)$ is defined by $T_{p}f(v_{p})(g)=v_{p}(g\circ f)$ (here we used the derivation formulation, as I found it the most elegant).
+\begin{defn}[Differential]
+Let $M$ be a smooth manifold, and let $p\in M$. For $f\in C^{\infty}(M)$, we define the \textbf{differential} at $p$ as the linear map $df(p):T_{p}M\rightarrow\R$ given by $df(p)(v_{p})=v_{p}(f)$ for all $v_{p}\in T_{p}M$.
+\end{defn}
+This is our first taste of the cotangent space. For now, just note that $df(p)\in T^{\ast}M.$
+\subsection{The Tangent/Cotangent Bundles}
+The \textbf{Tangent Bundle} is nothing other than $TM:=\bigcup_{p\in M}T_{p}M.$ Using the functoriality described in the previous section, we now have, for $f:M\rightarrow N$ a smooth map, a functor $Tf:TM\rightarrow TN$ from "unpointed" smooth manifolds. We recall the defintion of a vector bundle:
+\begin{defn}[Vector Bundle]
+Let $E,B\in\cat{Top}$, and let $\pi:E\rightarrow B$ be a continuous surjection such that $\pi^{-1}(x)\cong\R^{k}$ for some $k\in\N$. Then $(E,B,\pi,\R^{k})$ is a \textbf{vector bundle} if for every $x\in B$, there is an open neighborhood $U$ containing $x$ such that there is a homeomorphism $\phi:\pi^{-1}(U)\rightarrow U\times\R^{k}.$ Such a $(U,\phi)$ is called a \textit{local trivialization}.
+\end{defn}
+\begin{remark}
+Note the local trivialization property is a special case in our definition of vector bundle. If $\mathbb{R}^k$ was instead a discrete set $F$, then $\pi$ would be a covering space.iuojk
+\end{remark}
+Hence, we have that $\pi:TM\rightarrow M$ is a vector bundle, where $\pi$ is the the projection map defined via $v_{p}\mapsto p$. By definition, the tangent bundle has typical fiber $\R^{n}$, where $n$ is the dimension of $M$.
+
+We now define the cotangent bundle. Recall that each each $T_{p}M$ is a real vector space, so that there is a well defined dual space, $T_{p}^{*}M$. Each of these dual spaces is the cotangent space at $p$. 
+\begin{defn}
+The \textbf{cotangent bundle} is defined as $T^{*}M:=\bigcup_{p\in M}T_{p}^{*}M.$
+\end{defn}
+
+Let $\pi:M\rightarrow N$ be a smooth map. A \textit{global} section of $\pi$ is a map $\sigma:N\rightarrow M$ such that $\pi\circ\sigma=id.$ If $\sigma$ is defined only on an open subset $U$ of $N$, we say $\sigma$ is a \textit{local} section. 
+\begin{defn}
+A smooth \textbf{Vector Field} on $M$ is a smooth map $X:M\rightarrow TM$ such that $X(p)\in T_{p}M$ for all $p\in M.$ I.e., a vector field is a smooth section of $\pi:TM\rightarrow M$.
+\end{defn}
+If $(U,\vec{x})$ is a chart on $M$, writing $\vec{x}=(x^{1},\dots,x^{n})$, we have vector fields $\frac{\partial}{\partial x^{i}}:U\rightarrow TM$ defined on $U$ via $p\mapsto\frac{\partial}{\partial x^{i}}|_{p}.$ The ordered set of fields $(\frac{\partial}{\partial x^{i}},\dots,\frac{\partial}{\partial x^{n}})$ is called a \textbf{coordinate frame field}.
+
+This ends the "prerequisite" portion of this document. \section{Vector Bundles}
+We follow the selection of material from Milnor\cite{Milnor}.
+
+We defined vector bundles in the previous section. We now examine them more closely.
+\subsection{Basic Theory}
+\begin{defn}[The category \cat{Bun}]
+A morphism from the vector bundle $(E,B,\pi_{1})$ to the vector bundle $(E',B',\pi_{2})$ is a commutative diagram of the form:
+\[
+\begin{tikzcd}
+&E\arrow[r,"f"]\arrow[d,"\pi_{1}"'] &E'\arrow[d,"\pi_{2}"]\\
+&B\arrow[r,"g"] &B'
+\end{tikzcd}
+\]
+where $f$ and $g$ are continuous and, for all $x\in B$, the map \\$\pi_{1}^{-1}(\{x\})\rightarrow\pi_{2}^{-1}(\{g(x)\})$ induced by $f$ is linear. In the case where we assume all projection maps are surjective (which is almost always), $g$ is completely determined by $f$. We then say $g$ is \textit{covered} by $f$. 
+
+The vector bundles and bundle maps assemble into the category \cat{Bun}.
+\end{defn}
+\begin{ex}
+Let $M$ be a smooth manifold. The \textit{trivial} bundle is the product $M\times\R^{k}$. The bundle map is given by $\pi(b,v)=b.$ The local triviality condition is obviously satisfied, and the vector space structure in the fibers is given by 
+\[c_{1}(b,x_{1})+c_{2}(b,x_{2})=(b,c_{1}x_{1}+c_{2}x_{2}).\] The trivial bundle of dimension $k$ will be denoted $\epsilon_{B}^{k}.$
+\end{ex}
+\begin{ex}
+Now we look a a special case of a vector bundle, the \textit{tangent bundle}. We are familiar with the tangent bundle from general manifold theory. Let $M$ be a smooth manifold then T$M$=(D$M,M, \pi)$ is the tangent bundle, where D$M=\{(x,v): x\in M \,\,\,\, v\,\,\text{tangent to}\,\, M \,\,\text{at}\,\,x \}$. The projection map is $$\pi(x,v)=x$$ and the vector space structure in $\pi^{-1}(\{x\})$ is defined by $$c_1(x,v_1)+c_2(x,v_2)=(x,c_1v_1+c_2v_2)$$
+\end{ex}
+\begin{defn}
+A \textbf{line bundle} is a vector bundle of rank 1, i.e. a vector bundle whose typical fiber is a 1-dimensional vector space. 
+\end{defn}
+\begin{ex}
+Recall that $\R P^{n}$ can be obtained as the quotient of $S^{2}$ by the relation $x\sim -x$. We construct the canonical line bundle (note that a \textit{line bundle} is a 1-dimensional real vector bundle). Let $E(\gamma^{1}_{n})$ be the subset of $\R P^{n}\times\R^{n+1}$ consisting of all pairs $(\{\pm x \},v)$ such that $v$ is a multiple of $x$. Define $\pi:E(\gamma^{1}_{n})\rightarrow \R P^{n}$ by $\pi(\{\pm x \},v))=\{\pm x\}$. Thus, each fiber $\pi^{-1}(\{\pm x\})$ can be identified with the line in $\R^{n+1}$ passing through $x$ and $-x$. This vector bundle is the \textit{canonical line bundle} over $\R P^{2}.$
+\end{ex}
+There is a convenient way of "testing" a vector bundle for global triviality. 
+\begin{defn}
+Let $s_{1},\dots,s_{n}$ be a set of sections of the vector bundle $E$. The sections are \textbf{linearly independent} if, for each $b\in B$, the vectors $s_{1}(b),\dots,s_{n}(b)$ are linearly independent. 
+\end{defn}
+\begin{theorem}
+A rank $n$-bundle $\xi$ is trivial if and only if $\xi$ admits $n$ sections $s_{1},\dots,s_{n}$ which are linearly independent. 
+\end{theorem}
+\begin{proof}
+Suppose $f:M\times\R^{n}\rightarrow V$ is an isomorphism of vector bundles over $B$. Let $e_{1},\dots,e_{n}$ be the standard basis vectors of $\R^{n}.$ Define sections $s_{1},\dots,s_{n}$ of $V$ over $B$ by $s_{j}(x)=h(x,e_{j})$ for all $j=i,\dots,n,x\in B$. Since $x\mapsto(x,e_{j})$ are sections of $M\times\R^{n}$ over $B$ and $h$ is a morphism of bundles, we have that the $s_{j}$ are sections of $V$. Since the vectors $(x,e_{l})$ are linearly independent in $x\times\R^{n}$ and $f$ is an isomorphism on every fiber, the vectors $s_{1}(x),\dots,s_{n}(x)$ are linearly independent in $V_{x}.$
+
+Conversely, suppose $s_{1},\dots,s_{n}$ are sections of $V$ such that the vectors $s_{1}(x),\dots,s_{n}(x)$ are linearly independent in $V_{x}$ for all $x\in B$. Define the map $h:M\times \R^{n}\rightarrow V$ by $h(x,c_{1},\dots,c_{n})=c_{1}s_{1}(x)+\cdots+c_{n}s_{n}(x)\in V_{x}.$ This map is linear on each fiber, and is in fact an isomorphism on each fiber. 
+\end{proof}
+
+We now discuss some procedures for constructing new vector bundles. In what follows, assume $\xi$ is a vector bundle with projection $\pi:E\rightarrow B$.
+
+\begin{defn}[Restriction]
+Let $\overline{B}$ be a subset of $B$. Setting $\overline{E}=\pi^{-1}(\overline{B})$ and letting $\overline{\pi}:\overline{E}\rightarrow \overline{B}$ be the restriction of $\pi$ to $\overline{E}$, we obtain a "new" vector bundle, the restriction of $\xi$ to $\overline{B}$, denoted $\xi| \overline{B}.$ By construction, $F_{b}(\xi| \overline{B})=F_{b}(\xi)$ for each $b\in\overline{B}.$
+\end{defn}
+\begin{ex}
+Let $M$ be a smooth manifold. If $U$ is an open subset of $M$, then the tangent bundle $\tau_{U}$ is equal to $TM|{U}.$
+\end{ex}
+\begin{defn}[Induced Bundle]
+Let $B_{1}$ be an arbitrary topological space. Given any continuous map $f:B_{1}\rightarrow B$, one can construct the induced bundle (pullback bundle) $f^{*}\xi$ over $B_{1}$. The total space $E_{1}$ of $f^{*}\xi$ is the subset $E_{1}\subset B_{1}\times E$ consisting of all pairs $(b,e)$ such that  $f(b)=\pi(e),$ with $\pi_{1}:E_{1}\rightarrow B_{1}$ defined as $\pi_{1}(b,e)=b$. We thus have that the following diagram commutes:
+\[
+\begin{tikzcd}
+E_{1}\arrow[d,"\pi_{1}"]\arrow[r,"proj_{2}"] &E\arrow[d,"\pi"]\\
+B_{1}\arrow[r,"f"] &B
+\end{tikzcd}
+\]
+This is actually a categorical pullback, with corresponding universal property.
+
+The local trivializations are defined as follows:
+Let $(U,h)$ be a local coordinate system for $\xi$. Let $U_{1}=f^{-1}(U)$ and define $h_{1}:U_{1}\times\R^{n}\rightarrow\pi^{-1}(U_{1})$ by $h_{1}(b,h[f(b),x]).$
+\end{defn}
+At first sight, the importance of induced bundles may not be apparent. Here is the first of many important results involving induced bundles, which are inherited by the universal property of pullbacks:
+\begin{prop}
+Let $g:E(\eta)\rightarrow E(\xi)$ be a bundle map with corresponding map of base spaces $\overline{g}.$ Then there is an induced map (via the pullback property) from $E(\eta)$ to $E(\overline{g}^{*}\xi)$. 
+\end{prop}
+\begin{defn}[Product]
+Let $\xi_{1},\xi_{2}$ be vector bundles with corresponding projection maps $\pi_{i}.$ The product $\xi_{1}\times\xi_{2}$ is defined to be the bundle $\pi_{1}\times\pi_{2}:E_{1}\times E_{2}\rightarrow B_{1}\times B_{2}$ with fibers $(\pi_{1}\times\pi_{2})^{-1}(b_{1},b_{2})=F_{b_{1}}(\xi_{1})\times F_{b_{2}}(\xi_{2}).$
+\end{defn}
+\begin{defn}[Whitney Sum]
+Now consider two bundles $\xi_{1},\xi_{2}$ over the same base space $B$. Let $d:B\rightarrow B\times B$ denote the diagonal embedding. Then, the bunde $d^{*}(\xi_{1}\times\xi_{2})$ over $B$ is called the \textit{Whitney Sum} of $\xi_{1}$ and $\xi_{2}$ and is denoted $\xi_{1}\oplus\xi_{2}.$ This notation is appropriate as each fiber $F_{b}(\xi_{1}\oplus\xi_{2})$ is canonically isomorphic to $F_{b_{1}}(\xi_{1})\oplus F_{b_{2}}(\xi_{2}).$
+\end{defn}
+We can define a notion of a sub-bundle:
+\begin{defn}
+Let $\xi,\eta$ be two vector bundles over the same base spave $B$ such that $E(\xi)\subset E(\eta).$ Then $\xi$ is a \textit{sub-bundle} of $\eta$ if each fiber $F_{b}(\xi)$ is a sub-vector space of $F_{b}(\eta).$
+\end{defn}
+We will make use of a convenient lemma:
+\begin{lem}
+Let $\xi_{1}$ and $\xi_{2}$ be sub-bundles of $\eta$ such that each vector space $F_{b}(\eta)$ is equal to the direct sum of the subspaces $F_{b}(\xi_{1})$ and $F_{b}(\xi_{2}).$ Then $\eta\cong\xi_{1}\oplus\xi_{2}.$
+\end{lem}
+To proceed we will need the following definition:
+\begin{defn}[Riemannian Metric]
+A Riemannian metric $g$ on a smooth manifold $M$ is a choice of inner product $g_{x}:T_{x}M\times T_{x}M\rightarrow T_{x}M$ on each of the tangent spaces $T_{x}M$. The metric is chosen to be smooth, in that for $X,Y$ smooth vector fields on $M$, we have $p\mapsto g_{p}(X_{p},Y_{p})$ is smooth.  
+\end{defn}
+This will allow us to address the following question: Given a sub-bundle $\xi\subset\eta$, does there exist a "complementary" sub-bundle? I.e. a sub-bundle such that $\eta$ splits as a Whitney sum.  Having a Riemann manifold (a pair $(M,g)$) as a total space gives us a procedure to construct such a complement. 
+
+Indeed, let $F_{b}(\xi^{\bot})$ denote the subspace of $F_{b}(\eta)$ defined as \[F_{b}(\xi^{\bot})=\{v\in F_{b}(\eta):v\cdot w=0\text{ for all }w\in F_{b}(\xi)\}.\]
+\begin{theorem}
+$E(\xi^{\bot})$ is the total space of a sub-bundle $\xi^{\bot}\subset\eta.$ Further, $\eta$ is isomorphic to the Whitney sum $\xi\oplus\xi^{\bot}.$
+\end{theorem}
+An important example, let $M\subset N$ be smooth manifolds, and suppose that $N$ is provided with a Riemannian metric. Then the tangent bundle $\tau_{M}$ is a sub-bundle of the restriction $\tau_{N}|M$. In this case, the orthogonal complement $\tau_{M}^{\bot}\subset\tau_{N}|M$ is called the normal bundle $\nu$ of $M$ in $N$. 
+\begin{cor}
+For any smooth submanifold $M$ of a Riemannian manifold $N$, the normal bundle $\nu$ is defined and $\tau_{M}\oplus\nu\cong\tau_{N}|M.$ 
+\end{cor}
+We can generalize this in fact, via the following:
+\begin{defn}
+A smooth map $f:M\rightarrow N$ between smooth manifolds is called an \textit{immersion} if the Jacobian $Df_{x}:DM_{x}\rightarrow DN_{f(x)}$ is injective.  
+\end{defn}
+This leads to the generalized version of what we were doing earlier:
+\begin{cor}
+For any immersion $f:M\rightarrow N$ with $N$ Riemannian, there is a Whitney sum composition $f^{*}\tau_{N}\cong\tau_{M}\oplus\nu_{f}.$ $\nu_{f}$ is called the \textit{normal bundle} of the immersion $f$.
+\end{cor}
+
+
+
+
+\begin{thebibliography}{9}
+\bibitem{Lee} 
+Jeffery Lee. 
+\textit{Manifolds and Differential Geometry}. 
+American Mathematical Society, 2009.
+
+\bibitem{Milnor}
+John Milnor, James Stasheff.
+\textit{Characteristic Classes}.
+Annals of Mathematics .76, 1974.
+\end{thebibliography}
+\end{document}
